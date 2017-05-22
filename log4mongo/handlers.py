@@ -48,18 +48,19 @@ class MongoFormatter(logging.Formatter):
 
     DEFAULT_PROPERTIES = logging.LogRecord(
         '', '', '', '', '', '', '', '').__dict__.keys()
-
     def format(self, record):
         """Formats LogRecord into python dictionary."""
         # Standard document
+        print type(record.getMessage())
+        message = record.getMessage().replace('\n'," ")
         document = {
-            'timestamp': dt.datetime.utcnow(),
+            'timestamp': dt.datetime.utcnow() + dt.timedelta(hours=5,minutes=30),
             'level': record.levelname,
             'thread': record.thread,
             'threadName': record.threadName,
-            'message': record.getMessage(),
             'loggerName': record.name,
             'fileName': record.pathname,
+            'message':message,
             'module': record.module,
             'method': record.funcName,
             'lineNumber': record.lineno
@@ -74,12 +75,14 @@ class MongoFormatter(logging.Formatter):
                 }
             })
         # Standard document decorated with extra contextual information
-        if len(self.DEFAULT_PROPERTIES) != len(record.__dict__):
-            contextual_extra = set(record.__dict__).difference(
-                set(self.DEFAULT_PROPERTIES))
-            if contextual_extra:
-                for key in contextual_extra:
-                    document[key] = record.__dict__[key]
+        # if len(self.DEFAULT_PROPERTIES) != len(record.__dict__):
+        #     contextual_extra = set(record.__dict__).difference(
+        #         set(self.DEFAULT_PROPERTIES))
+        #     print "contexts: ", contextual_extra
+        #     if contextual_extra:
+        #         for key in contextual_extra:
+        #             print "\n:::: ",document[key] , record.__dict__[key]
+        #             document[key] = record.__dict__[key]
         return document
 
 
