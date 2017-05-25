@@ -58,7 +58,17 @@ It is possible to decorate you document with contextual information. There are t
  logger.info('test', extra={'ip': '127.0.0.1'})
 
 
-As you can see, second approach is more straightforward and there is no need to use LoggerAdapter.
+As you can see, second approach is more straightforward and there is no need to use LoggerAdapter. Please note that, for those who are using Mongo Auth, you can simply pass a valid Mongo URI with Auth credentials to the host.
+For example,
+
+.. code-block:: python
+
+ import logging
+ from log4mongo.handlers import MongoHandler
+
+ handler = MongoHandler(host='mongodb://<user>:<password>@<server>:<port>')
+ logger = logging.getLogger('test')
+ logger.addHandler(handler)
 
 
 Capped collections
